@@ -91,12 +91,13 @@ function build_hexagonal_grid_dict(n::Int64, m::Int64)
     return adj_dict, map_from_ij_to_k
 end
 
-function form_static_ham(nq::Int64, adj_dict::Dict, qubit_map::Dict, J=1.0, Γ=0.0)
     """
     Given adjacency dictionary, builds the static
     portion of spin Hamiltonian,
     H = J \sum_{<i, j>} Z_i Z_j - \Gamma \sum_{i} X_i
     """
+
+function form_static_ham(nq, adj_dict, qubit_map, J, Γ)
     op_list = []
     coeffs = []
     # add transverse field (X) if Γ != 0
@@ -109,7 +110,7 @@ function form_static_ham(nq::Int64, adj_dict::Dict, qubit_map::Dict, J=1.0, Γ=0
     zz_term_sum = nothing
     for (key, value) in adj_dict
         q0 = qubit_map[key]
-        q1 = qubit_ma[value[1]]
+        q1 = qubit_map[value[1]]
         zz_term = two_local_term(1, [q0, q1], nq)
         for v in value[2:end]
             zz_term += two_local_term(1, [q0, q1], nq)

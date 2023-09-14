@@ -7,7 +7,7 @@ include("helperFuncs.jl")
 # Step 0: Get a sense of Δ(Γ)
 ##
 J = 1
-nt = 2
+nt = 1
 xaxis = []
 yaxis = []
 for Γ in 0.0:0.01:1
@@ -59,6 +59,32 @@ function compute_delta(Γ, nt=1)
 
     return Δ
 end
+##
+
+##
+for Γ=0:0.1:2
+    adj_mat = build_triangular_chain_adjacency_matrix(nt);
+    x_part, z_part = form_static_ham_ops(adj_mat, J, Γ)
+    h_static = z_part - x_part
+    E = eigvals(h_static)
+    push!(energy_list, E)
+end
+##
+
+##
+nt = 1
+adj_mat = build_triangular_chain_adjacency_matrix(nt);
+x_part, z_part = form_static_ham_ops(adj_mat, J, Γ)
+h_static = z_part - x_part
+H = DenseHamiltonian([(s)-> s, (s)->1-s], [z_part, x_part])
+##
+
+##
+Γ = 0.1
+adj_mat = build_triangular_chain_adjacency_matrix(1);
+x_part, z_part = form_static_ham_ops(adj_mat, J, Γ)
+h_static = z_part - x_part
+E = eigvals(h_static)
 ##
 
 ## perform optimizations
